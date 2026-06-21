@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Coverstock — turn a drawing into a notebook-cover pattern</title>
+<title>Pattern Generator</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2321342c'/%3E%3Crect x='4' y='4' width='11' height='11' rx='2' fill='%23e8762c'/%3E%3Crect x='17' y='4' width='11' height='11' rx='2' fill='%23e8762c' fill-opacity='0.55'/%3E%3Crect x='4' y='17' width='11' height='11' rx='2' fill='%23e8762c' fill-opacity='0.55'/%3E%3Crect x='17' y='17' width='11' height='11' rx='2' fill='%23e8762c'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -55,12 +56,21 @@
     margin-bottom:4px;
   }
   .brand-mark{
-    width:14px;height:14px;
-    background:var(--accent);
-    border-radius:3px;
+    width:20px;height:20px;
     flex-shrink:0;
-    transform:rotate(8deg);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr 1fr;
+    gap:3px;
   }
+  .brand-mark span{
+    background:var(--accent);
+    border-radius:2px;
+  }
+  .brand-mark span:nth-child(1){ background:var(--accent); }
+  .brand-mark span:nth-child(2){ background:var(--accent); opacity:0.55; }
+  .brand-mark span:nth-child(3){ background:var(--accent); opacity:0.55; }
+  .brand-mark span:nth-child(4){ background:var(--accent); }
   .brand h1{
     font-family:'Space Grotesk', sans-serif;
     font-size:19px;
@@ -883,8 +893,8 @@
   <!-- ============ SIDEBAR ============ -->
   <div class="sidebar">
     <div class="brand">
-      <div class="brand-mark"></div>
-      <h1>Coverstock</h1>
+      <div class="brand-mark"><span></span><span></span><span></span><span></span></div>
+      <h1>Pattern Generator</h1>
     </div>
     <p class="brand-sub">pattern maker for notebook covers</p>
 
@@ -2633,8 +2643,8 @@
         const dataUrl = outCanvas.toDataURL('image/png');
         pdf.addImage(dataUrl, 'PNG', 0, 0, wMm, hMm);
         const pdfBlob = pdf.output('blob');
-        shareFileIfMobile(pdfBlob, 'coverstock-pattern.pdf', 'application/pdf').then(shared => {
-          if(!shared) pdf.save('coverstock-pattern.pdf');
+        shareFileIfMobile(pdfBlob, 'pattern-generator.pdf', 'application/pdf').then(shared => {
+          if(!shared) pdf.save('pattern-generator.pdf');
           finish();
         });
         return;
@@ -2644,7 +2654,7 @@
       const ext = isJpg ? 'jpg' : 'png';
       const quality = isJpg ? 0.92 : undefined;
       outCanvas.toBlob(blob => {
-        const filename = 'coverstock-pattern.' + ext;
+        const filename = 'pattern-generator.' + ext;
         shareFileIfMobile(blob, filename, mime).then(shared => {
           if(!shared){
             const a = document.createElement('a');
